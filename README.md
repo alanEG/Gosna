@@ -16,8 +16,6 @@ A Mointor url for change
     
 ## Installation
 
-- [Download](https://github.com/alaneg/gosna/releases/latest) a prebuilt binary from [releases page](https://github.com/alaneg/gosna/releases/latest), unpack and run!
-  
   _or_
 - If you have recent go compiler installed: `go install github.com/alanEG/Gosna` (the same command works for updating)
   
