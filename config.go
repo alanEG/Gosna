@@ -4,11 +4,22 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"runtime"
 )
 
 func config_handling(action string) error {
 	var err error
 	var json_data []byte
+
+	configFile = func() string {
+		if os.Getenv("gosna_config") != "" {
+			return os.Getenv("gosna_config")
+		} else {
+			return configFileFlag
+		}
+	}()
+
 	if action == "load" {
 		config_data, err := ioutil.ReadFile(configFile)
 
@@ -28,6 +39,14 @@ func config_handling(action string) error {
 	}
 
 	return err
+}
+
+func platform_handling() {
+	if runtime.GOOS == "windows" {
+		pathTemp = "c:\\windows\\temp\\"
+	} else {
+		pathTemp = "/tmp/"
+	}
 }
 
 //this for setup the config file and folder result and work directory

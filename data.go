@@ -55,4 +55,5 @@ var (
 	data           Json
 	Headers        arrayFlags
 	Header         map[string]string
+	pathTemp       string
 )

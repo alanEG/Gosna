@@ -17,15 +17,15 @@ import (
 )
 
 func Running() {
+
+	//print banner
 	Banner()
+
+	//handling cli flags
 	options_parse()
-	configFile = func() string {
-		if os.Getenv("gosna_config") != "" {
-			return os.Getenv("gosna_config")
-		} else {
-			return configFileFlag
-		}
-	}()
+
+	//set path temp
+	platform_handling()
 
 	config_handling("load") //load config file
 
@@ -153,9 +153,9 @@ func Check(targets chan Target, mainWg *sync.WaitGroup) {
 					), "[]",
 				), ",",
 			)
-			remove_line_from_file("/tmp/"+rand, DynmaicLine, target.Url)
+			remove_line_from_file(pathTemp+rand, DynmaicLine, target.Url)
 		}
-		_, err = save_file("/tmp/"+rand, target.Url)
+		_, err = save_file(pathTemp+rand, target.Url)
 
 		if err != nil {
 			logger("error", "[Error]", target.Url, err, 0)
@@ -198,7 +198,7 @@ func Dynamic(urls chan string, wa *sync.WaitGroup, headers map[string]string) {
 		file_name, err := check_dynamic(url, resp, headers)
 
 		for filen, _ := range file_name {
-			os.Remove("/tmp/" + filen)
+			os.Remove(pathTemp + filen)
 		}
 
 		if err != nil {

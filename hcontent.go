@@ -20,7 +20,7 @@ func content_type_format(url string, resp *http.Response) (string, int, error) {
 
 	rand := random_string(10)
 
-	filename := "/tmp/" + rand
+	filename := pathTemp + rand
 
 	Body, err := ioutil.ReadAll(resp.Body)
 
@@ -100,7 +100,7 @@ func check_dynamic(url string, resps []*http.Response, headers map[string]string
 				}
 
 				save = "done"
-				filename_save, err = save_file("/tmp/"+filenamed, url)
+				filename_save, err = save_file(pathTemp+filenamed, url)
 
 				if err != nil {
 					return file_name, err
@@ -131,7 +131,7 @@ func check_dynamic(url string, resps []*http.Response, headers map[string]string
 		//get the first file name
 		filename_save = reflect.ValueOf(file_name).MapKeys()[0].Interface().(string)
 		//save in result folder
-		filename_save, err = save_file("/tmp/"+filename_save, url)
+		filename_save, err = save_file(pathTemp+filename_save, url)
 		if err != nil {
 			return file_name, err
 		}
@@ -152,8 +152,8 @@ func get_diff_line_len(file_old, file_new string) []string {
 	//Get the diffrent line between two files
 	out_command = Execute_command(
 		argument + fmt.Sprintf(
-			" /tmp/%s /tmp/%s |  sed 's/,$//g'",
-			file_old, file_new,
+			" %s%s %s%s |  sed 's/,$//g'",
+			pathTemp, file_old, pathTemp, file_new,
 		),
 	)
 

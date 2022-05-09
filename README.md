@@ -42,8 +42,8 @@ The defualt config file will be
 {
   "Config": {
     "Is_first": false,
-    "Directory_work": "/home/user/work/",
-    "Directory_result": "/home/user/result/",
+    "Directory_work": "",
+    "Directory_result": "",
     "Channel_use": "None",
     "Channel": {
       "Slack": null,
@@ -136,9 +136,9 @@ You can use one of this options in flag `-repeat` or `-r` by
 
 Here simply how check dynamic works when add
 
-1 - Send 5 request and save them responses in `tmp` directory
+1 - Send 5 request and save them responses in `temp` directory
 
-2 - Get the the dynamic lines from the responses in the `tmp` directory   
+2 - Get the the dynamic lines from the responses in the `temp` directory   
 
 3 - Save the bigest response length 
 
