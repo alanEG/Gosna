@@ -9,24 +9,7 @@ import (
 	gomail "gopkg.in/mail.v2"
 )
 
-func getUrlByFileName(filenames []string) []string {
-	fileUrls := make(map[string]string)
-
-	for _, target := range data.Target {
-		filename := strings.Split(target.Filename, "/")
-		fileUrls[filename[len(filename)-1]] = target.Url
-
-	}
-
-	for fileElemeNum, fileName := range filenames {
-		filenames[fileElemeNum] = fileUrls[fileName]
-	}
-
-	return filenames
-}
-
 func push_notifcation(file string, files_has_change []string) {
-	files_has_change = getUrlByFileName(files_has_change)
 	current_time := time.Now()
 	format_time := fmt.Sprintf("[%d-%02d-%02d %02d:%02d:%02d]",
 		current_time.Year(), current_time.Month(), current_time.Day(),

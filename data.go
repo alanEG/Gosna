@@ -45,6 +45,7 @@ type arrayFlags []string
 var (
 	configFileFlag string
 	configFile     string
+	flagRepeat     string
 	Run            string
 	add            string
 	flagNoColor    bool

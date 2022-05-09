@@ -195,6 +195,22 @@ func remove_line_from_file(filename string, lines_number []string, url string) {
 	)
 }
 
+func getUrlByFileName(filenames []string) []string {
+	fileUrls := make(map[string]string)
+
+	for _, target := range data.Target {
+		filename := strings.Split(target.Filename, "/")
+		fileUrls[filename[len(filename)-1]] = target.Url
+
+	}
+
+	for fileElemeNum, fileName := range filenames {
+		filenames[fileElemeNum] = fileUrls[fileName]
+	}
+
+	return filenames
+}
+
 func Diff() {
 	var files_has_change []string
 
@@ -223,9 +239,9 @@ func Diff() {
 		)
 		if data.Config.Channel_use != "None" {
 			push_notifcation(time_file, files_has_change)
-			fmt.Println(fmt.Sprintf("There is change in this file [%s]\n%s", time_file, strings.Join(files_has_change, "\n")))
+			fmt.Println(fmt.Sprintf("There is change in this file [%s]\n%s", time_file, strings.Join(getUrlByFileName(files_has_change), "\n")))
 		} else {
-			fmt.Println(fmt.Sprintf("There is change in this file [%s]\n%s", time_file, strings.Join(files_has_change, "\n")))
+			fmt.Println(fmt.Sprintf("There is change in this file [%s]\n%s", time_file, strings.Join(getUrlByFileName(files_has_change), "\n")))
 		}
 	}
 }

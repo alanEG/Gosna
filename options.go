@@ -7,17 +7,31 @@ import (
 	"strings"
 )
 
+func Banner() {
+	banner := fmt.Sprintf(`    ______      _____   ______  __   __    _____    
+   /_/\___\    ) ___ ( / ____/\/_/\ /\_\  /\___/\   
+   ) ) ___/   / /\_/\ \) ) __\/) ) \ ( ( / / _ \ \  
+  /_/ /  ___ / /_/ (_\ \\ \ \ /_/   \ \_\\ \(_)/ /  
+  \ \ \_/\__\\ \ )_/ / /_\ \ \\ \ \   / // / _ \ \  
+   )_)  \/ _/ \ \/_\/ /)____) ))_) \ (_(( (_( )_) ) 
+   \_\____/    )_____( \____\/ \_\/ \/_/ \/_/ \_\/  
+                  v1.0 @alanEG
+`)
+	fmt.Println(banner)
+}
+
 //declare flag.Usage values
 func init() {
 	flag.Usage = func() {
-		h := "Usage: ./change [options]\n"
+		h := "Usage: ./gosna [options]\n"
 		h += "   -run          Run type [add,check]\n"
 		h += "   -timeout      Requests timeout (default 5)\n"
 		h += "   -thread       Requests thread\n"
-		h += "   -header       Requests header\n"
+		h += "   -header  -H   Requests header\n"
+		h += "   -repeat  -r   Repeat Check  [m,h,d]\n"
 		h += "   -dynamic      Check dynamic (default false)\n"
 		h += "   -config       Config file   (default ~/.gosna_config.json)\n"
-		h += "   -no-color     Disable color\n\n"
+		h += "   -no-color     Disable color\n"
 
 		fmt.Fprintf(os.Stderr, h)
 	}
@@ -42,6 +56,8 @@ func options_parse() {
 	directoryHome, _ := os.UserHomeDir()
 
 	flag.StringVar(&configFileFlag, "config", directoryHome+"/.gosna_config.json", "")
+	flag.StringVar(&flagRepeat, "repeat", "", "")
+	flag.StringVar(&flagRepeat, "r", "", "")
 	flag.BoolVar(&flagDynmaic, "dynamic", false, "")
 	flag.BoolVar(&flagNoColor, "no-color", false, "")
 	flag.IntVar(&flagTimeout, "timeout", 5, "")

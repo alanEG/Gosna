@@ -17,9 +17,8 @@ import (
 )
 
 func Running() {
-
+	Banner()
 	options_parse()
-
 	configFile = func() string {
 		if os.Getenv("gosna_config") != "" {
 			return os.Getenv("gosna_config")
@@ -34,54 +33,89 @@ func Running() {
 
 	wg := &sync.WaitGroup{}
 
-	w := make(chan string)
-	c := make(chan Target)
-
 	if Run == "add" {
-
-		go func() { //add for add new targets for check they later
-			q := bufio.NewScanner(os.Stdin) //read from stdin
-			for q.Scan() {
-				w <- q.Text()
-			}
-			close(w)
-
-		}()
-
-		for i := 0; i < Thread; i++ {
-			wg.Add(1)
-			go Dynamic(w, wg, Header)
-
-		}
-		wg.Wait()
+		Dynamic_pre(wg)
 
 	} else if Run == "check" {
-		go func() { //check the target
-			a := data.Target //Json target Object
-			for _, b := range a {
-				c <- b
+		if flagRepeat != "" {
+			for {
+				Check_pre(wg)
+				config_handling("save")
+				Handling_time(flagRepeat)
 			}
-			close(c)
-
-		}()
-
-		for i := 0; i < Thread; i++ {
-			wg.Add(1)
-			go Check(c, wg)
+		} else {
+			Check_pre(wg)
 
 		}
 
-		wg.Wait()
-		Diff()
-
 	} else { //exit if the run flag is null or not [check,add]
-
 		fmt.Println("Enter Valid run type [check,add]")
 		flag.Usage()
 		os.Exit(0)
+
 	}
 	config_handling("save")
+}
 
+func Handling_time(Time string) {
+	Type := string(Time[len(Time)-1])
+	TimeSleep, _ := strconv.Atoi(Time[0 : len(Time)-1])
+	switch Type {
+	case "m":
+		logger("success", "\n[Sleep]", "Sleep "+strconv.Itoa(TimeSleep)+" Minute\n", "", 0)
+		time.Sleep(time.Duration(TimeSleep) * time.Minute)
+
+	case "h":
+		logger("success", "\n[Sleep]", "Sleep "+strconv.Itoa(TimeSleep)+" Hour\n", "", 0)
+		time.Sleep(time.Duration(TimeSleep) * time.Hour)
+
+	case "d":
+		logger("success", "\n[Sleep]", "Sleep "+strconv.Itoa(TimeSleep)+" day\n", "", 0)
+		time.Sleep(time.Duration(TimeSleep*24) * time.Hour)
+	default:
+		logger("error", "\n[Error]", "Repeat Option not valid", "Enter valid repeat option [m,h,d]", 1)
+		os.Exit(0)
+	}
+}
+
+func Dynamic_pre(wg *sync.WaitGroup) {
+	w := make(chan string)
+	go func() { //add for add new targets for check they later
+		q := bufio.NewScanner(os.Stdin) //read from stdin
+		for q.Scan() {
+			w <- q.Text()
+		}
+		close(w)
+
+	}()
+
+	for i := 0; i < Thread; i++ {
+		wg.Add(1)
+		go Dynamic(w, wg, Header)
+
+	}
+	wg.Wait()
+}
+
+func Check_pre(wg *sync.WaitGroup) {
+	c := make(chan Target)
+	go func() { //check the target
+		a := data.Target //Json target Object
+		for _, b := range a {
+			c <- b
+		}
+		close(c)
+
+	}()
+
+	for i := 0; i < Thread; i++ {
+		wg.Add(1)
+		go Check(c, wg)
+
+	}
+
+	wg.Wait()
+	Diff()
 }
 
 //Check request if there is change in urls

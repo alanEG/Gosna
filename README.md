@@ -1,4 +1,4 @@
-# Gosna - Monitor Url
+# Gosna
 
 A Mointor url for change 
 
@@ -45,8 +45,8 @@ The defualt config file will be
 {
   "Config": {
     "Is_first": false,
-    "Directory_work": "~/work/",
-    "Directory_result": "~/result/",
+    "Directory_work": "/home/user/work/",
+    "Directory_result": "/home/user/result/",
     "Channel_use": "None",
     "Channel": {
       "Slack": null,
@@ -84,12 +84,21 @@ The defualt config file will be
 The usage examples below show just the simplest tasks you can accomplish using `gosna -h`. 
 
 ```
-Enter Valid run type [check,add]
-Usage: ./change [options]
+    ______      _____   ______  __   __    _____    
+   /_/\___\    ) ___ ( / ____/\/_/\ /\_\  /\___/\   
+   ) ) ___/   / /\_/\ \) ) __\/) ) \ ( ( / / _ \ \  
+  /_/ /  ___ / /_/ (_\ \\ \ \ /_/   \ \_\\ \(_)/ /  
+  \ \ \_/\__\\ \ )_/ / /_\ \ \\ \ \   / // / _ \ \  
+   )_)  \/ _/ \ \/_\/ /)____) ))_) \ (_(( (_( )_) ) 
+   \_\____/    )_____( \____\/ \_\/ \/_/ \/_/ \_\/  
+                  v1.0 @alanEG
+
+Usage: ./gosna [options]
    -run          Run type [add,check]
    -timeout      Requests timeout (default 5)
    -thread       Requests thread
-   -header       Requests header
+   -header  -H   Requests header
+   -repeat  -r   Repeat Check  [m,h,d]
    -dynamic      Check dynamic (default false)
    -config       Config file   (default ~/.gosna_config.json)
    -no-color     Disable color
@@ -119,9 +128,13 @@ Chcek for check the url if there change
 `gosna -run check`
 
 Gosna will gets the urls from config file then get the new content 
+And save it in the work directory then diff the new content with new content 
 
-And save it in the work directory then diff the new content with new conten
+Reapet check for diffrent time by flag `-repeat` or `-r`
+In this options you have 3 subs options [m,h,d] minute,hour,day
+You can use one of this options in flag `-repeat` or `-r` by 
 
+`gosna -run check -repeat 1m`
 ### Dynamic Usage
 
 Here simply how check dynamic works when add
