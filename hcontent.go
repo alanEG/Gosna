@@ -20,8 +20,6 @@ func content_type_format(url string, resp *http.Response) (string, int, error) {
 	}else {
 		contentType = ""
 	}
-	
-	contentType := strings.Split(resp.Header["Content-Type"][0], ";")[0]
 
 	//get extension from url
 	extion := strings.ReplaceAll(regexp.MustCompile(`\.([a-zA-Z0-9]+)$`).FindString(url), ".", "")
