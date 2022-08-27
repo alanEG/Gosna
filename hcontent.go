@@ -13,6 +13,14 @@ import (
 //Handling Response body
 func content_type_format(url string, resp *http.Response) (string, int, error) {
 	//Get content-type header
+	var contentType string
+	//Check if the header has value or None
+	if len(resp.Header["Content-Type"]) != 0 {
+		contentType = strings.Split(resp.Header["Content-Type"][0], ";")[0]
+	}else {
+		contentType = ""
+	}
+	
 	contentType := strings.Split(resp.Header["Content-Type"][0], ";")[0]
 
 	//get extension from url
