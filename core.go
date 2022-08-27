@@ -17,13 +17,6 @@ import (
 )
 
 func Running() {
-	//check if diff2html install or not 
-	_, err := exec.LookPath("diff2html")
-
-	if err != nil {
-		logger("error", "\n[command404]", "diff2html doesn't exist:\n\npm install diff2html", "", 1)
-	}
-	
 	Banner()
 	options_parse()
 	configFile = func() string {
