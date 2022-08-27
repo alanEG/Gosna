@@ -13,7 +13,13 @@ import (
 //Handling Response body
 func content_type_format(url string, resp *http.Response) (string, int, error) {
 	//Get content-type header
-	contentType := strings.Split(resp.Header["Content-Type"][0], ";")[0]
+	var contentType string
+	//Check if the header has value or None
+	if len(resp.Header["Content-Type"]) != 0 {
+		contentType = strings.Split(resp.Header["Content-Type"][0], ";")[0]
+	}else {
+		contentType = ""
+	}
 
 	//get extension from url
 	extion := strings.ReplaceAll(regexp.MustCompile(`\.([a-zA-Z0-9]+)$`).FindString(url), ".", "")
