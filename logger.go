@@ -24,11 +24,9 @@ func logger(typeLog, Flag, message, reason interface{}, errorRange int) {
 		if reason != nil {
 			fmt.Fprintf(os.Stderr, "%s %s\n", red("[Error]"), message)
 			fmt.Fprintf(os.Stderr, "Reason: %s\n", reason)
-		} else {
-			fmt.Fprintf(os.Stderr, "%s %s\n", red("[Error]"), message)
-		}
-		if errorRange == 1 {
-			os.Exit(0)
+			if errorRange == 1 {
+				os.Exit(0)
+			}
 		}
 	}
 }
