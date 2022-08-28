@@ -215,6 +215,9 @@ func Dynamic(urls chan string, wa *sync.WaitGroup, headers map[string]string) {
 			file_name, err := check_dynamic(url, resp, headers)
 
 			if err != nil {
+				for filen, _ := range file_name {
+					os.Remove("/tmp/" + filen)
+				}
 				break
 			}
 		

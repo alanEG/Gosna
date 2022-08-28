@@ -82,10 +82,10 @@ func check_dynamic(url string, resps []*http.Response, headers map[string]string
 	}
 
 	//check if the file_name is nil
-	if file_name != nil {
+	if len(file_name) == 0 {
 		return file_name,nil
 	}
-	
+
 	content_length_last_file := file_name[reflect.ValueOf(file_name).MapKeys()[len(file_name)-1].Interface().(string)]
 	content_length_first_file := file_name[reflect.ValueOf(file_name).MapKeys()[0].Interface().(string)]
 
