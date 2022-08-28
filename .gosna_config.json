@@ -1,0 +1,21 @@
+{
+  "Config": {
+    "Is_first": false,
+    "Directory_work": "/home/anany/gosna/work/",
+    "Directory_result": "/home/anany/gosna/result/",
+    "Channel_use": "slack",
+    "Channel": {
+      "Slack": "https://hooks.slack.com/services/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",
+      "Mail": {
+        "Tls": true,
+        "From": "",
+        "To": "",
+        "Host": "",
+        "Port": 0,
+        "Email": "",
+        "Password": ""
+      }
+    }
+  },
+  "Target": []
+}

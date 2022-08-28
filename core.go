@@ -201,6 +201,7 @@ func Dynamic(urls chan string, wa *sync.WaitGroup, headers map[string]string) {
 
 					if err != nil {
 						logger("error", "[Error]", url, err, 0)
+						wg.Done()
 						return
 					}
 
@@ -213,6 +214,11 @@ func Dynamic(urls chan string, wa *sync.WaitGroup, headers map[string]string) {
 
 			file_name, err := check_dynamic(url, resp, headers)
 
+			
+			if err != nil {
+				break
+			}
+		
 			for filen, _ := range file_name {
 				os.Remove("/tmp/" + filen)
 			}
@@ -222,6 +228,7 @@ func Dynamic(urls chan string, wa *sync.WaitGroup, headers map[string]string) {
 				break
 			}
 			logger("success", "[Add]", url, "", 0)
+		
 		} else {
 			logger("error", "[Error]", url, "Dublicate Url", 0)
 		}
