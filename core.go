@@ -17,12 +17,12 @@ import (
 )
 
 func Running() {
-	_, err := exec.LookPath("diff2html")
-
-	if err != nil {
-		logger("error", "\n[command404]", "diff2html doesn't exist:\n\tnpm install diff2html", "", 1)
+	_, errDiff := exec.LookPath("diff2html")
+	_, errJsB  := exec.LookPath("js-beautify")
+	if errDiff != nil && errJsB != nil {
+		logger("error", "\n[command404]", "diff2html doesn't exist:\n\tnpm install diff2html\nor\nnpm i js-beautify", "", 1)
 	}
-	
+
 	Banner()
 	options_parse()
 	configFile = func() string {
@@ -60,6 +60,7 @@ func Running() {
 		os.Exit(0)
 
 	}
+
 	config_handling("save")
 }
 
@@ -92,7 +93,6 @@ func Dynamic_pre(wg *sync.WaitGroup) {
 			w <- q.Text()
 		}
 		close(w)
-
 	}()
 
 	for i := 0; i < Thread; i++ {
@@ -175,43 +175,56 @@ func Check(targets chan Target, mainWg *sync.WaitGroup) {
 func Dynamic(urls chan string, wa *sync.WaitGroup, headers map[string]string) {
 	var wg sync.WaitGroup
 	loop := 1
+	errorDublicate := ""
 
 	defer wa.Done()
 	for url := range urls {
-		if flagDynmaic == true {
-			loop = 5
+		for targerUrlIndex := range data.Target {
+			if url == data.Target[targerUrlIndex].Url {
+				errorDublicate = "err"
+				break
+			}
 		}
 
-		var resp []*http.Response
+		if errorDublicate != "err" {
+			if flagDynmaic == true {
+				loop = 5
+			}
 
-		//Forloop for get 3 request for check the lines between them later
-		for i := 0; i < loop; i++ {
-			wg.Add(1)
-			go func() {
-				response, err := send_request(url, "GET", headers, []byte{})
+			var resp []*http.Response
 
-				if err != nil {
-					logger("error", "[Error]", url, err, 0)
-					return
-				}
+			//Forloop for get 3 request for check the lines between them later
+			for i := 0; i < loop; i++ {
+				wg.Add(1)
+				go func() {
+					response, err := send_request(url, "GET", headers, []byte{})
 
-				resp = append(resp, response)
-				wg.Done()
-			}()
+					if err != nil {
+						logger("error", "[Error]", url, err, 0)
+						return
+					}
+
+					resp = append(resp, response)
+					wg.Done()
+				}()
+			}
+
+			wg.Wait()
+
+			file_name, err := check_dynamic(url, resp, headers)
+
+			for filen, _ := range file_name {
+				os.Remove("/tmp/" + filen)
+			}
+
+			if err != nil {
+				logger("error", "[Error]", url, err, 0)
+				break
+			}
+			logger("success", "[Add]", url, "", 0)
+		} else {
+			logger("error", "[Error]", url, "Dublicate Url", 0)
 		}
-
-		wg.Wait()
-		file_name, err := check_dynamic(url, resp, headers)
-
-		for filen, _ := range file_name {
-			os.Remove("/tmp/" + filen)
-		}
-
-		if err != nil {
-			logger("error", "[Error]", url, err, 0)
-			break
-		}
-		logger("success", "[Add]", url, "", 0)
 	}
 }
 

@@ -27,7 +27,6 @@ func content_type_format(url string, resp *http.Response) (string, int, error) {
 	rand := random_string(10)
 
 	filename := "/tmp/" + rand
-
 	Body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {

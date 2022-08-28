@@ -11,12 +11,15 @@ func config_handling(action string) error {
 	var json_data []byte
 	if action == "load" {
 		config_data, err := ioutil.ReadFile(configFile)
-
-		logger("error", "[Error]", err, err, 1)
+		if err != nil{
+			logger("error", "[Error]", err, err, 1)
+		}
 
 		err = json.Unmarshal(config_data, &data)
 
-		logger("error", "[Error]", err, err, 1)
+		if err != nil{
+			logger("error", "[Error]", err, err, 1)
+		}
 
 	} else if action == "save" {
 		json_data, err = json.MarshalIndent(data, "", "  ")

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-
 	"github.com/fatih/color"
 )
 
@@ -21,17 +20,15 @@ func logger(typeLog, Flag, message, reason interface{}, errorRange int) {
 	case "success":
 		fmt.Fprintf(os.Stderr, "%s %s\n", yellow(Flag), message)
 	case "error":
-		if reason != "" {
+		if reason != "" && reason != nil {
 			fmt.Fprintf(os.Stderr, "%s %s\n", red("[Error]"), message)
 			fmt.Fprintf(os.Stderr, "Reason: %s\n", reason)
 		} else {
 			fmt.Fprintf(os.Stderr, "%s %s\n", red("[Error]"), message)
 		}
+
 		if errorRange == 1 {
-			os.Exit(0)
-			if errorRange == 1 {
-				os.Exit(0)
-			}
+			os.Exit(1)
 		}
 	}
 }
