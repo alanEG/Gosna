@@ -16,19 +16,17 @@ A Mointor url for change
     
 ## Installation
 
-- If you have recent go compiler installed: `go install github.com/alanEG/Gosna` (the same command works for updating)
-  
+- Run the following command to install the tool `go install github.com/alanEG/Gosna` (the same command works for updating)
   _or_
 - `git clone https://github.com/alaneg/gosna ; cd gosna ; go build`
 
-Gosna depends on Go go1.18 or greater.
-
+Gosna depends on go1.18 or greater.
 
 ## Configuration file
 
-Gosna doesn't work if you don't setup config file for save the urls and file names and other config   
+Gosna won't work if you don't initialize the config file.  
 
-There are three ways the Gosna tool take config file from them 
+Gosna will search for the config file in three different ways.
 
 1 - `gosna_config` env
 
@@ -36,7 +34,7 @@ There are three ways the Gosna tool take config file from them
 
 3 - `-config` option
 
-The defualt config file will be 
+Here is an example of the configurations 
 
 ```json
 {
@@ -62,19 +60,19 @@ The defualt config file will be
 }
 ```
 
-`Is_first` Don't edit this will edit by the tool 
+`Is_first`: It helps Gosna with important setup tasks during its initial setup. If not, set it to true.
 
-`Directory_work` Edit this for the directory the tool will add the content of urls in it 
+`Directory_work`: Specify the folder where the tool will save the content from the URLs.
 
-`Directory_result` Edit this for the directory the tool will save html result in it 
+`Directory_result`: Specify the directory where the tool will save the results.
 
-`Channel_use` Edit this for the channel the tool will use if it found change or use `None` if you need print the result in stdout channel available `[slack,mail]`
+`Channel_use`: Specify the channel the tool will use if it detects a change, or set it to None if you want to print the result to the stdout. Available options are `[slack, mail]`.
 
 - `channel`
 
-  - `Slack` slack webhook
+  - `Slack`: Slack webhook
   
-  - `Mail` Mail config
+  - `Mail`: Mail config
 
 ## Example usage
 
@@ -108,24 +106,20 @@ There are two run type
 - check 
 
 ##### Example: `add` 
-Add for add the url to check it later 
+
+Add the url to check it later 
 
 `cat url.txt | gosna -run add`
 
-Gosna will gets the url content then format it 
-
-Then save the content in directory work file 
-
-And add it to config file in Target json object  
-
+Gosnal will retrieve the HTML content, save it in the work directory, and then store the URL along with its hash and options in the config file under the target JSON object.
 
 ##### Example: `check`
-Chcek for check the url if there change 
+
+Check the url if there change 
 
 `gosna -run check`
 
-Gosna will gets the urls from config file then get the new content 
-And save it in the work directory then diff the new content with new content 
+Gosna will retrieve the URLs from the config file, then fetch the new content, save it in the work directory, and compare the new content with the existing content.
 
 Reapet check for diffrent time by flag `-repeat` or `-r`
 In this options you have 3 subs options [m,h,d] minute,hour,day
@@ -134,38 +128,30 @@ You can use one of this options in flag `-repeat` or `-r` by
 `gosna -run check -repeat 1m`
 ### Dynamic Usage
 
-Here simply how check dynamic works when add
+Here's how the dynamic check operates when adding a new URL:
 
-1 - Send 5 request and save them responses in `tmp` directory
+1 - Send five requests and save the responses in the tmp directory.
 
-2 - Get the the dynamic lines from the responses in the `tmp` directory   
+2 - Extract the dynamic lines from the response, then remove the dynamic lines from a selected file.
 
-3 - Save the bigest response length 
+3 - Save response of the selected one to the work directory  
 
-4 - Remove the dynamic lines from the file saved 
+Here's how the dynamic check functions when the tool checks for any changes:
 
-5 - Add `true` in object is `Target[n].Status` for knowing the tool it is dynamic url 
+1 - Fetch the latest response.
 
-Here simply how check dynamic works when Check
+2 - Remove the dynamic lines from the response.
 
-1 - Check the url is dynamic or not by `Target[n].Status`
-
-2 - Send request and remove the dynamic lines then save it in the file in work directory 
-
-3 - Diff the old content with new contnet 
+3 - Compare the new response with the old response to check for changes.
 
 
 ##### Example
 `cat urls.txt | gosna -run add -dynamic`
 
 ##### Note
-Some time Dynamic option not working well 
+Sometimes, the dynamic option may not work effectively.
 
-Let's imagen we need to monitor the `https://www.youtube.com/`
-
-Because the it printing diffrent line number in each request 
-
-The tool will printed this url in each check  
+For instance, consider that we need to monitor `https://www.youtube.com/`. Since it prints different line numbers with each request, the tool will display this URL in each check.
 
 ## License
 
